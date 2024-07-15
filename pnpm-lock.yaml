@@ -12,8 +12,8 @@ importers:
   .:
     dependencies:
       better-use-context-selector:
-        specifier: ^0.0.4
-        version: 0.0.4(react@17.0.2)(scheduler@0.20.2)
+        specifier: ^0.0.5
+        version: 0.0.5(react@17.0.2)(scheduler@0.20.2)
     devDependencies:
       '@testing-library/jest-dom':
         specifier: ^5.14.1
@@ -1235,8 +1235,8 @@ packages:
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
-  better-use-context-selector@0.0.4:
-    resolution: {integrity: sha512-DwBqchOo4sc/m8nz1UVR5Z3l1q0/D+zsncPlajceGwysX+i+D7v+/Iv36UrrF0Ty5XmL5ITfesMA8xXb/tKrUQ==}
+  better-use-context-selector@0.0.5:
+    resolution: {integrity: sha512-8Roqf5Xz4uboQJhSre/KB17df5w2xYnTK2kvQ7aQWlI+AuZFLFNCdkAooOFgFq63PaAlRC9MxSwlqcNAtQpY+A==}
     peerDependencies:
       react: '>=18.0.0'
       scheduler: '>=0.19.0'
@@ -4576,7 +4576,7 @@ snapshots:
 
   balanced-match@1.0.2: {}
 
-  better-use-context-selector@0.0.4(react@17.0.2)(scheduler@0.20.2):
+  better-use-context-selector@0.0.5(react@17.0.2)(scheduler@0.20.2):
     dependencies:
       react: 17.0.2
       scheduler: 0.20.2

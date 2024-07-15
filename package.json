@@ -1,6 +1,6 @@
 {
   "name": "better-nice-modal-react",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
@@ -93,6 +93,6 @@
     "react-dom": ">16.8.0"
   },
   "dependencies": {
-    "better-use-context-selector": "^0.0.4"
+    "better-use-context-selector": "^0.0.5"
   }
 }
