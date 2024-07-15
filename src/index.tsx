@@ -12,6 +12,7 @@
  * */
 
 import React, { useEffect, useCallback, useContext, useReducer, useMemo, ReactNode } from 'react';
+import { createContext, useContextSelector } from 'better-use-context-selector';
 
 export interface NiceModalState {
   id: string;
@@ -89,7 +90,7 @@ export interface NiceModalHocProps {
 }
 const symModalId = Symbol('NiceModalId');
 const initialState: NiceModalStore = {};
-export const NiceModalContext = React.createContext<NiceModalStore>(initialState);
+export const NiceModalContext = createContext(initialState);
 const NiceModalIdContext = React.createContext<string | null>(null);
 const MODAL_REGISTRY: {
   [id: string]: {
@@ -302,7 +303,6 @@ export function useModal<C extends any, P extends Partial<NiceModalArgs<React.FC
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function useModal(modal?: any, args?: any): any {
-  const modals = useContext(NiceModalContext);
   const contextModalId = useContext(NiceModalIdContext);
   let modalId: string | null = null;
   const isUseComponent = modal && typeof modal !== 'string';
@@ -323,7 +323,7 @@ export function useModal(modal?: any, args?: any): any {
     }
   }, [isUseComponent, mid, modal, args]);
 
-  const modalInfo = modals[mid];
+  const modalInfo = useContextSelector(NiceModalContext, (v: any) => v[mid]);
 
   const showCallback = useCallback((args?: Record<string, unknown>) => show(mid, args), [mid]);
   const hideCallback = useCallback(() => hide(mid), [mid]);
@@ -380,12 +380,12 @@ export function useModal(modal?: any, args?: any): any {
 export const create = <P extends {}>(
   Comp: React.ComponentType<P>,
 ): React.FC<P & NiceModalHocProps> => {
-  return ({ defaultVisible, keepMounted, id, ...props }) => {
+  return React.memo(({ defaultVisible, keepMounted, id, ...props }) => {
     const { args, show } = useModal(id);
 
     // If there's modal state, then should mount it.
-    const modals = useContext(NiceModalContext);
-    const shouldMount = !!modals[id];
+    const modalInfo = useContextSelector(NiceModalContext, (v: any) => v[id]);
+    const shouldMount = !!modalInfo;
 
     useEffect(() => {
       // If defaultVisible, show it after mounted.
@@ -404,7 +404,7 @@ export const create = <P extends {}>(
       if (keepMounted) setFlags(id, { keepMounted: true });
     }, [id, keepMounted]);
 
-    const delayVisible = modals[id]?.delayVisible;
+    const delayVisible = modalInfo?.delayVisible;
     // If modal.show is called
     //  1. If modal was mounted, should make it visible directly
     //  2. If modal has not been mounted, should mount it first, then make it visible
@@ -421,7 +421,7 @@ export const create = <P extends {}>(
         <Comp {...(props as P)} {...args} />
       </NiceModalIdContext.Provider>
     );
-  };
+  });
 };
 
 // All registered modals will be rendered in modal placeholder
@@ -448,7 +448,7 @@ export const unregister = (id: string): void => {
 // The placeholder component is used to auto render modals when call modal.show()
 // When modal.show() is called, it means there've been modal info
 const NiceModalPlaceholder: React.FC = () => {
-  const modals = useContext(NiceModalContext);
+  const modals = useContextSelector(NiceModalContext, (t: any) => t);
   const visibleModalIds = Object.keys(modals).filter((id) => !!modals[id]);
   visibleModalIds.forEach((id) => {
     if (!MODAL_REGISTRY[id] && !ALREADY_MOUNTED[id]) {
@@ -567,7 +567,12 @@ export const ModalHolder: React.FC<Record<string, unknown>> = ({
 
 export const antdModal = (
   modal: NiceModalHandler,
-): { visible: boolean; onCancel: () => void; onOk: () => void; afterClose: () => void } => {
+): {
+  visible: boolean;
+  onCancel: () => void;
+  onOk: () => void;
+  afterClose: () => void;
+} => {
   return {
     visible: modal.visible,
     onOk: () => modal.hide(),
@@ -581,7 +586,12 @@ export const antdModal = (
 };
 export const antdModalV5 = (
   modal: NiceModalHandler,
-): { open: boolean; onCancel: () => void; onOk: () => void; afterClose: () => void } => {
+): {
+  open: boolean;
+  onCancel: () => void;
+  onOk: () => void;
+  afterClose: () => void;
+} => {
   const { onOk, onCancel, afterClose } = antdModal(modal);
   return {
     open: modal.visible,
@@ -592,7 +602,11 @@ export const antdModalV5 = (
 };
 export const antdDrawer = (
   modal: NiceModalHandler,
-): { visible: boolean; onClose: () => void; afterVisibleChange: (visible: boolean) => void } => {
+): {
+  visible: boolean;
+  onClose: () => void;
+  afterVisibleChange: (visible: boolean) => void;
+} => {
   return {
     visible: modal.visible,
     onClose: () => modal.hide(),
@@ -606,7 +620,11 @@ export const antdDrawer = (
 };
 export const antdDrawerV5 = (
   modal: NiceModalHandler,
-): { open: boolean; onClose: () => void; afterOpenChange: (visible: boolean) => void } => {
+): {
+  open: boolean;
+  onClose: () => void;
+  afterOpenChange: (visible: boolean) => void;
+} => {
   const { onClose, afterVisibleChange: afterOpenChange } = antdDrawer(modal);
   return {
     open: modal.visible,
@@ -616,7 +634,11 @@ export const antdDrawerV5 = (
 };
 export const muiDialog = (
   modal: NiceModalHandler,
-): { open: boolean; onClose: () => void; onExited: () => void } => {
+): {
+  open: boolean;
+  onClose: () => void;
+  onExited: () => void;
+} => {
   return {
     open: modal.visible,
     onClose: () => modal.hide(),
@@ -629,7 +651,11 @@ export const muiDialog = (
 
 export const muiDialogV5 = (
   modal: NiceModalHandler,
-): { open: boolean; onClose: () => void; TransitionProps: { onExited: () => void } } => {
+): {
+  open: boolean;
+  onClose: () => void;
+  TransitionProps: { onExited: () => void };
+} => {
   return {
     open: modal.visible,
     onClose: () => modal.hide(),
@@ -643,7 +669,11 @@ export const muiDialogV5 = (
 };
 export const bootstrapDialog = (
   modal: NiceModalHandler,
-): { show: boolean; onHide: () => void; onExited: () => void } => {
+): {
+  show: boolean;
+  onHide: () => void;
+  onExited: () => void;
+} => {
   return {
     show: modal.visible,
     onHide: () => modal.hide(),
