@@ -1,21 +1,21 @@
 # Nice Modal
 
-## Why this library?
+This is a small, zero dependency utility to manage modals in a natural way for React. It uses context to persist state of modals globally so that you can show/hide a modal easily either by the modal component or id.
 
-this project is Forked from `@ebay/nice-modal-react` and fixed some bugs.
+## Why use this library?
+
+this project is Forked from `@ebay/nice-modal-react@1.2.13` and fixed some bugs.
 
 - we fixed `rerender` problem while opening multi modal by using [better-use-context-selector](https://github.com/LesterWeng/use-context-selector)
 
-## Introduction
-
-This is a small, zero dependency utility to manage modals in a natural way for React. It uses context to persist state of modals globally so that you can show/hide a modal easily either by the modal component or id.
+## Usage
 
 > You can also see the introduction at [eBay tech blog](https://medium.com/ebaytech/rethink-modals-management-in-react-cf3b6804223d).
 >
 > **_Also check out our another nice utility! [nice-form-react](https://github.com/eBay/nice-form-react)! 😜_**
 
-[![NPM](https://img.shields.io/npm/v/@ebay/nice-modal-react.svg)](https://www.npmjs.com/package/@ebay/nice-modal-react)
-[![Downloads](https://img.shields.io/npm/dm/@ebay/nice-modal-react.svg)](https://www.npmjs.com/package/@ebay/nice-modal-react)
+[![NPM](https://img.shields.io/npm/v/better-nice-modal-react.svg)](https://www.npmjs.com/package/better-nice-modal-react)
+[![Downloads](https://img.shields.io/npm/dm/better-nice-modal-react.svg)](https://www.npmjs.com/package/better-nice-modal-react)
 [![Build Status](https://api.travis-ci.com/eBay/nice-modal-react.svg?branch=main)](https://app.travis-ci.com/github/eBay/nice-modal-react)
 [![Coverage Status](https://codecov.io/gh/ebay/nice-modal-react/branch/main/graph/badge.svg)](https://codecov.io/github/eBay/nice-modal-react)
 [![Demo](https://img.shields.io/badge/demo-link-orange.svg)](https://ebay.github.io/nice-modal-react/)
@@ -24,7 +24,7 @@ This is a small, zero dependency utility to manage modals in a natural way for R
 For example, you can use below code to show a modal anywhere:
 
 ```jsx
-import NiceModal from '@ebay/nice-modal-react';
+import NiceModal from 'better-nice-modal-react';
 import MyModal from './MyModal';
 
 //...
@@ -37,7 +37,7 @@ NiceModal.show(MyModal, { someProp: 'hello' }).then(() => {
 Or you can register the modal with an id so that you don't need to import the modal component to use it:
 
 ```jsx
-import NiceModal from '@ebay/nice-modal-react';
+import NiceModal from 'better-nice-modal-react';
 import MyModal from './MyModal';
 
 NiceModal.register('my-modal', MyModal);
@@ -49,7 +49,7 @@ NiceModal.show('my-modal', { someProp: 'hello' }).then(() => {
 //...
 ```
 
-**NOTE**: `@ebay/nice-modal-react` is not a React modal component but should be used with other modal/dialog implementions by UI libraries like [Material UI](https://material-ui.com/), [Ant.Design](https://ant.design), [Bootstrap React](https://react-bootstrap.github.io/), etc.
+**NOTE**: `better-nice-modal-react` is not a React modal component but should be used with other modal/dialog implementions by UI libraries like [Material UI](https://material-ui.com/), [Ant.Design](https://ant.design), [Bootstrap React](https://react-bootstrap.github.io/), etc.
 
 # Examples
 
@@ -119,10 +119,10 @@ However, besides using id, NiceModal allows to use the modal component directly 
 
 ```bash
 # with yarn
-yarn add @ebay/nice-modal-react
+yarn add better-nice-modal-react
 
 # or with npm
-npm install @ebay/nice-modal-react
+npm install better-nice-modal-react
 ```
 
 ## Create Your Modal Component
@@ -131,7 +131,7 @@ With NiceModal you can create a separate modal component easily. It's just the s
 
 ```jsx
 import { Modal } from 'antd';
-import NiceModal, { useModal } from '@ebay/nice-modal-react';
+import NiceModal, { useModal } from 'better-nice-modal-react';
 
 export default NiceModal.create(({ name }: { name: string }) => {
   // Use a hook to manage the modal state
@@ -167,7 +167,7 @@ There are very flexible APIs for you to manage modals. See below for the introdu
 Since we will manage status of modals globally, the first thing is embedding your app with NiceModal provider, for example:
 
 ```js
-import NiceModal from '@ebay/nice-modal-react';
+import NiceModal from 'better-nice-modal-react';
 ReactDOM.render(
   <React.StrictMode>
     <NiceModal.Provider>
@@ -185,7 +185,7 @@ The provider will use React context to maintain all modals' state.
 You can control a nice modal by the component itself.
 
 ```js
-import NiceModal from '@ebay/nice-modal-react';
+import NiceModal from 'better-nice-modal-react';
 import MyAntdModal from './my-antd-modal'; // created by above code
 
 function App() {
@@ -209,7 +209,7 @@ function App() {
 You can also control a nice modal by id:
 
 ```js
-import NiceModal from '@ebay/nice-modal-react';
+import NiceModal from 'better-nice-modal-react';
 import MyAntdModal from './my-antd-modal'; // created by above code
 
 // If use by id, need to register the modal component.
@@ -238,7 +238,7 @@ function App() {
 The `useModal` hook can not only be used inside a modal component but also any component by passing it a modal id/component:
 
 ```jsx
-import NiceModal, { useModal } from '@ebay/nice-modal-react';
+import NiceModal, { useModal } from 'better-nice-modal-react';
 import MyAntdModal from './my-antd-modal'; // created by above code
 
 NiceModal.register('my-antd-modal', MyAntdModal);
@@ -259,7 +259,7 @@ modal.hide(); // hide the modal
 The nice modal component you created can be also used as a normal component by JSX, then you don't need to register it. For example:
 
 ```jsx
-import NiceModal, { useModal } from '@ebay/nice-modal-react';
+import NiceModal, { useModal } from 'better-nice-modal-react';
 import MyAntdModal from './my-antd-modal'; // created by above code
 
 function App() {
@@ -313,7 +313,7 @@ Though not necessary, you can integrate Redux to manage state of nice modals. Th
 // First combine the reducer
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import { Provider, useSelector, useDispatch } from 'react-redux';
-import NiceModal from '@ebay/nice-modal-react';
+import NiceModal from 'better-nice-modal-react';
 import { Button } from 'antd';
 import { MyAntdModal } from './MyAntdModal';
 import logger from 'redux-logger';
@@ -395,7 +395,7 @@ import NiceModal, {
   antdDrawer,
   antdDrawerV5,
   bootstrapDialog
-} from '@ebay/nice-modal-react';
+} from 'better-nice-modal-react';
 
 //...
 const modal = useModal();
@@ -444,7 +444,7 @@ https://ebay.github.io/nice-modal-react/api/
 You can test your nice modals with tools like `@testing-library/react`.
 
 ```jsx
-import NiceModal from '@ebay/nice-modal-react';
+import NiceModal from 'better-nice-modal-react';
 import { render, act, screen } from '@testing-library/react';
 import { MyNiceModal } from '../MyNiceModal';
 
@@ -463,7 +463,7 @@ test('My nice modal works!', () => {
 
 ```bash
 # 1. Clone repo
-git clone https://github.com/eBay/nice-modal-react.git
+git clone https://github.com/LesterWeng/nice-modal-react.git
 
 # 2. Install deps
 cd nice-modal-react
@@ -480,7 +480,7 @@ cd example
 yarn
 
 # 6. Use local linked lib
-yarn link @ebay/nice-modal-react
+yarn link better-nice-modal-react
 
 # 7. Start examples dev server
 yarn start
@@ -506,8 +506,6 @@ export default function AntdSample() {
   );
 }
 ```
-
-See more [here](https://github.com/eBay/nice-modal-react/issues/104).
 
 # License
 
