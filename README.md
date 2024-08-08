@@ -1,10 +1,18 @@
 # Nice Modal
 
+## Why this library?
+
+this project is Forked from `@ebay/nice-modal-react` and fixed some bugs.
+
+- we fixed `rerender` problem while opening multi modal by using [better-use-context-selector](https://github.com/LesterWeng/use-context-selector)
+
+## Introduction
+
 This is a small, zero dependency utility to manage modals in a natural way for React. It uses context to persist state of modals globally so that you can show/hide a modal easily either by the modal component or id.
 
 > You can also see the introduction at [eBay tech blog](https://medium.com/ebaytech/rethink-modals-management-in-react-cf3b6804223d).
-> 
-> ***Also check out our another nice utility! [nice-form-react](https://github.com/eBay/nice-form-react)! 😜***
+>
+> **_Also check out our another nice utility! [nice-form-react](https://github.com/eBay/nice-form-react)! 😜_**
 
 [![NPM](https://img.shields.io/npm/v/@ebay/nice-modal-react.svg)](https://www.npmjs.com/package/@ebay/nice-modal-react)
 [![Downloads](https://img.shields.io/npm/dm/@ebay/nice-modal-react.svg)](https://www.npmjs.com/package/@ebay/nice-modal-react)
@@ -12,8 +20,6 @@ This is a small, zero dependency utility to manage modals in a natural way for R
 [![Coverage Status](https://codecov.io/gh/ebay/nice-modal-react/branch/main/graph/badge.svg)](https://codecov.io/github/eBay/nice-modal-react)
 [![Demo](https://img.shields.io/badge/demo-link-orange.svg)](https://ebay.github.io/nice-modal-react/)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/eBay/nice-modal-react/blob/main/LICENSE.md)
-
-
 
 For example, you can use below code to show a modal anywhere:
 
@@ -29,6 +35,7 @@ NiceModal.show(MyModal, { someProp: 'hello' }).then(() => {
 ```
 
 Or you can register the modal with an id so that you don't need to import the modal component to use it:
+
 ```jsx
 import NiceModal from '@ebay/nice-modal-react';
 import MyModal from './MyModal';
@@ -40,24 +47,26 @@ NiceModal.show('my-modal', { someProp: 'hello' }).then(() => {
   // do something if the task in the modal finished.
 });
 //...
-
 ```
 
 **NOTE**: `@ebay/nice-modal-react` is not a React modal component but should be used with other modal/dialog implementions by UI libraries like [Material UI](https://material-ui.com/), [Ant.Design](https://ant.design), [Bootstrap React](https://react-bootstrap.github.io/), etc.
 
 # Examples
+
 You can see a list of examples at: https://ebay.github.io/nice-modal-react
 
 # Key Features
-* Zero dependency and small: ~2kb after gzip.
-* Uncontrolled. You can close modal itself in the modal component.
-* Decoupled. You don't have to import a modal component to use it. Modals can be managed by id.
-* The code of your modal component is not executed if it's invisible.
-* It doesn't break the transitions of showing/hiding a modal.
-* Promise based. Besides using props to interact with the modal from the parent component, you can do it easier by promise.
-* Easy to integrate with any UI library.
+
+- Zero dependency and small: ~2kb after gzip.
+- Uncontrolled. You can close modal itself in the modal component.
+- Decoupled. You don't have to import a modal component to use it. Modals can be managed by id.
+- The code of your modal component is not executed if it's invisible.
+- It doesn't break the transitions of showing/hiding a modal.
+- Promise based. Besides using props to interact with the modal from the parent component, you can do it easier by promise.
+- Easy to integrate with any UI library.
 
 # Motivation
+
 Using modals in React is a bit frustrating. Think of that if you need to implement below UI:
 
 <img src="images/modal-example.jpg" width="700px"/>
@@ -78,7 +87,7 @@ const Root = () => {
       <NewTicketModal visible={visible} />
     </>
   );
-}
+};
 ```
 
 However, when you declare the modal in the root component, there are some issues:
@@ -91,7 +100,8 @@ Unfortunately, most examples of using modals just follow this practice, it cause
 I believe you must once encountered with the scenario that originally you only needed to show a modal when click a button, then when requirements changed, you need to open the same modal from a different place. Then you have to refactor your code to re-consider where to declare the modal. The root cause of such annoying things is just because we have not understood the essential of a modal.
 
 # Rethink the Modal Usage Pattern in React
-According to the [wikipedia](https://en.wikipedia.org/wiki/Modal_window), a modal can be described as: 
+
+According to the [wikipedia](https://en.wikipedia.org/wiki/Modal_window), a modal can be described as:
 
 > A window that prevents the user from interacting with your application until he closes the window.
 
@@ -104,6 +114,7 @@ For pages management, we already have router framework like React Router, it hel
 However, besides using id, NiceModal allows to use the modal component directly to manage it.
 
 # Usage
+
 ## Installation
 
 ```bash
@@ -115,6 +126,7 @@ npm install @ebay/nice-modal-react
 ```
 
 ## Create Your Modal Component
+
 With NiceModal you can create a separate modal component easily. It's just the same as you create a normal component but wrap it with high order compponent by `NiceModal.create`. For example, below code shows how to create a dialog with [Ant.Design](https://ant.design):
 
 ```jsx
@@ -139,16 +151,19 @@ export default NiceModal.create(({ name }: { name: string }) => {
 ```
 
 From the code, we can see:
-* The modal is uncontrolled. You can hide your modal inside the component regardless where it is showed.
-* The high order component created by `NiceModal.create` ensures your component is not executed before it becomes visible.
-* You can call `modal.remove` to remove your modal component from the React component tree to reserve transitions.
+
+- The modal is uncontrolled. You can hide your modal inside the component regardless where it is showed.
+- The high order component created by `NiceModal.create` ensures your component is not executed before it becomes visible.
+- You can call `modal.remove` to remove your modal component from the React component tree to reserve transitions.
 
 Next, let's see how to use the modal.
 
 ## Using Your Modal Component
+
 There are very flexible APIs for you to manage modals. See below for the introduction.
 
 ### Embed your application with `NiceModal.Provider`:
+
 Since we will manage status of modals globally, the first thing is embedding your app with NiceModal provider, for example:
 
 ```js
@@ -166,7 +181,9 @@ ReactDOM.render(
 The provider will use React context to maintain all modals' state.
 
 ### Using the modal by component
+
 You can control a nice modal by the component itself.
+
 ```js
 import NiceModal from '@ebay/nice-modal-react';
 import MyAntdModal from './my-antd-modal'; // created by above code
@@ -174,7 +191,7 @@ import MyAntdModal from './my-antd-modal'; // created by above code
 function App() {
   const showAntdModal = () => {
     // Show a modal with arguments passed to the component as props
-    NiceModal.show(MyAntdModal, { name: 'Nate' })
+    NiceModal.show(MyAntdModal, { name: 'Nate' });
   };
   return (
     <div className="app">
@@ -188,7 +205,9 @@ function App() {
 ```
 
 ### Use the modal by id
+
 You can also control a nice modal by id:
+
 ```js
 import NiceModal from '@ebay/nice-modal-react';
 import MyAntdModal from './my-antd-modal'; // created by above code
@@ -201,7 +220,7 @@ NiceModal.register('my-antd-modal', MyAntdModal);
 function App() {
   const showAntdModal = () => {
     // Show a modal with arguments passed to the component as props
-    NiceModal.show('my-antd-modal', { name: 'Nate' })
+    NiceModal.show('my-antd-modal', { name: 'Nate' });
   };
   return (
     <div className="app">
@@ -214,8 +233,8 @@ function App() {
 }
 ```
 
-
 ### Use modal with the hook
+
 The `useModal` hook can not only be used inside a modal component but also any component by passing it a modal id/component:
 
 ```jsx
@@ -236,6 +255,7 @@ modal.hide(); // hide the modal
 ```
 
 ### Declare your modal instead of `register`
+
 The nice modal component you created can be also used as a normal component by JSX, then you don't need to register it. For example:
 
 ```jsx
@@ -245,7 +265,7 @@ import MyAntdModal from './my-antd-modal'; // created by above code
 function App() {
   const showAntdModal = () => {
     // Show a modal with arguments passed to the component as props
-    NiceModal.show('my-antd-modal')
+    NiceModal.show('my-antd-modal');
   };
   return (
     <div className="app">
@@ -260,12 +280,14 @@ function App() {
 ```
 
 With this approach, you can get the benifits:
-* Inherit React context in the modal component under some component node.
-* Pass arguments to the modal component via props.
+
+- Inherit React context in the modal component under some component node.
+- Pass arguments to the modal component via props.
 
 > NOTE: if you show the component by id but the modal is not declared or registered. Nothing will happen but only a warning message in the dev console.
 
 ### Using promise API
+
 Besides using props to interact with the modal from the parent component, you can do it easier by promise. For example, we have a user list page with a add user button to show a dialog to add user. After user is added the list should refresh itself to reflect the change, then we can use below code:
 
 ```jsx
@@ -274,16 +296,17 @@ NiceModal.show(AddUserModal)
     // When call modal.resolve(payload) in the modal component
     // it will resolve the promise returned by `show` method.
     // fetchUsers will call the rest API and update the list
-    fetchUsers()
+    fetchUsers();
   })
-  .catch(err=> {
+  .catch((err) => {
     // if modal.reject(new Error('something went wrong')), it will reject the promise
-  }); 
+  });
 ```
 
 You can see the live example on codesandbox.
 
 ### Integrating with Redux
+
 Though not necessary, you can integrate Redux to manage state of nice modals. Then you can use Redux dev tools to track/debug state change of modals. Here is how to do it:
 
 ```jsx
@@ -295,7 +318,8 @@ import { Button } from 'antd';
 import { MyAntdModal } from './MyAntdModal';
 import logger from 'redux-logger';
 
-const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
+const composeEnhancers =
+  (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 const enhancer = composeEnhancers(applyMiddleware(logger));
 
 const store = createStore(
@@ -327,16 +351,18 @@ export default function ReduxProvider({ children }) {
 ```
 
 ### Using with any UI library
-NiceModal provides  lifecyle methods to manage the state of modals. You can use modal handler returned by `useModal` hook to bind any modal like component to the state. Below are typical state and methods you will use:
 
-* **modal.visible**: the visibility of a modal.
-* **modal.hide**: will hide the modal, that is, change `modal.visible` to false.
-* **modal.remove**: remove the modal component from the tree so that you modal's code is not executed when it's invisible. Usually you call this method after the modal's transition.
-* **modal.keepMounted** if you don't want to remove the modal from the tree for some instances, you can decide if call `modal.remove` based on value of `keepMounted`.
+NiceModal provides lifecyle methods to manage the state of modals. You can use modal handler returned by `useModal` hook to bind any modal like component to the state. Below are typical state and methods you will use:
+
+- **modal.visible**: the visibility of a modal.
+- **modal.hide**: will hide the modal, that is, change `modal.visible` to false.
+- **modal.remove**: remove the modal component from the tree so that you modal's code is not executed when it's invisible. Usually you call this method after the modal's transition.
+- **modal.keepMounted** if you don't want to remove the modal from the tree for some instances, you can decide if call `modal.remove` based on value of `keepMounted`.
 
 Based on these properties/methods, you can easily use NiceModal with any modal-like component provided by any UI libraries.
 
 ### Using help methods
+
 As you already saw, we use code similar with below to manage the modal state:
 
 ```jsx
@@ -359,7 +385,6 @@ return (
 It binds `visible` property to the `modal` handler, and use `modal.hide` to hide the modal when close button is clicked. And after the close transition it calls `modal.remove` to remove the modal from dom node.
 
 For every modal implementation we always need to these binding manually. So, to make it easier to use we provides helper methods for 3 popular UI libraries Material UI, Ant.Design and Bootstrap React.
-
 
 ```jsx
 import NiceModal, {
@@ -411,6 +436,7 @@ const handleSubmit = () => {
 In the example, the `onOk` property will override the result from `antdModal` helper.
 
 ## API Reference
+
 https://ebay.github.io/nice-modal-react/api/
 
 ## Testing
@@ -424,16 +450,17 @@ import { MyNiceModal } from '../MyNiceModal';
 
 test('My nice modal works!', () => {
   render(<NiceModal.Provider />
-  
+
   act(() => {
     NiceModal.show(MyNiceModal);
   });
-  
+
   expect(screen.getByRole('dialog')).toBeVisible();
 });
 ```
 
 ## Contribution Guide
+
 ```bash
 # 1. Clone repo
 git clone https://github.com/eBay/nice-modal-react.git
@@ -462,8 +489,11 @@ yarn start
 Then you can access http://localhost:3000 to see the examples.
 
 ## FAQ
+
 ### Can I get context in the component tree in a modal?
+
 Yes. To get the data from context in the component tree you need to use the declarative way. For example:
+
 ```jsx
 export default function AntdSample() {
   return (
@@ -476,10 +506,9 @@ export default function AntdSample() {
   );
 }
 ```
+
 See more [here](https://github.com/eBay/nice-modal-react/issues/104).
 
 # License
+
 MIT
-
-
-
