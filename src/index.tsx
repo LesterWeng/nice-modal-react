@@ -261,6 +261,10 @@ export function hide<T>(modal: string | React.FC<any>): Promise<T>;
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function hide(modal: string | React.FC<any>) {
   const modalId = getModalId(modal);
+
+  // auto reject when modal.hide is called
+  modalCallbacks[modalId]?.reject('rejected called by modal.hide');
+
   dispatch(hideModal(modalId));
   // Should also delete the callback for modal.resolve #35
   delete modalCallbacks[modalId];
