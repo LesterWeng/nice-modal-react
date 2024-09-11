@@ -4,10 +4,9 @@ This is a small, zero dependency utility to manage modals in a natural way for R
 
 ## Why use this library?
 
-this project is Forked from `@ebay/nice-modal-react@1.2.13` and modified for some bugs:
+this project is Forked from `@ebay/nice-modal-react@1.2.13` and fixed some bugs.
 
-- fixed `rerender` problem while opening multi modal by using [better-use-context-selector](https://github.com/LesterWeng/use-context-selector)
-- auto reject when modal.hide is called
+- we fixed `rerender` problem while opening multi modal by using [better-use-context-selector](https://github.com/LesterWeng/use-context-selector)
 
 ## Usage
 
