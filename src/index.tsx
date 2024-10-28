@@ -282,6 +282,12 @@ export function hide(modal: string | React.FC<any>) {
   return hideModalCallbacks[modalId].promise;
 }
 
+export function hideAll(): void {
+  Object.keys(MODAL_REGISTRY).forEach((modalId) => {
+    hide(modalId);
+  });
+}
+
 export const remove = (modal: string | React.FC<any>): void => {
   const modalId = getModalId(modal);
   dispatch(removeModal(modalId));
@@ -694,6 +700,7 @@ const NiceModal = {
   getModal,
   show,
   hide,
+  hideAll,
   remove,
   useModal,
   reducer,
