@@ -288,6 +288,15 @@ export function hideAll(): void {
   });
 }
 
+/**
+ * Check if a modal is visible, use modalCallbacks to judge because the context value cannot be obtained
+ * @param modalId - The id of the modal
+ * @returns true if the modal is visible, false otherwise
+ */
+export function isVisible(modalId: string): boolean {
+  return !!modalCallbacks[modalId];
+}
+
 export const remove = (modal: string | React.FC<any>): void => {
   const modalId = getModalId(modal);
   dispatch(removeModal(modalId));
@@ -698,6 +707,7 @@ const NiceModal = {
   create,
   register,
   getModal,
+  isVisible,
   show,
   hide,
   hideAll,
